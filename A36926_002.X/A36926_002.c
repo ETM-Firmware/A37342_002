@@ -3,6 +3,8 @@
 
 void InitializeFlowMeter(TYPE_FLOW_READING* flow_ptr, unsigned int min_flow, unsigned int* ptr_icxbuf, unsigned int* ptr_tmrx);
 
+void CaptureInput(TYPE_FLOW_READING* flow_ptr);
+
 void UpdateFaults(void);
 
 
@@ -17,86 +19,13 @@ _FGS(CODE_PROT_OFF);
 _FICD(PGD);
 
 
-#define THERMISTOR_LOOK_UP_TABLE_VALUES 472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,472,377,376,375,374,373,372,371,370,370,369,368,367,366,366,365,364,363,363,362,361,361,360,360,359,358,358,357,357,356,355,355,354,354,353,353,352,352,351,351,350,350,350,349,349,348,348,347,347,346,346,346,345,345,344,344,344,343,343,343,342,342,341,341,341,340,340,340,339,339,339,338,338,338,337,337,337,336,336,336,336,335,335,335,334,334,334,333,333,333,333,332,332,332,332,331,331,331,330,330,330,330,329,329,329,329,328,328,328,328,327,327,327,327,326,326,326,326,326,325,325,325,325,324,324,324,324,323,323,323,323,323,322,322,322,322,322,321,321,321,321,320,320,320,320,320,319,319,319,319,319,318,318,318,318,318,318,317,317,317,317,317,316,316,316,316,316,315,315,315,315,315,315,314,314,314,314,314,313,313,313,313,313,313,312,312,312,312,312,311,311,311,311,311,311,310,310,310,310,310,310,309,309,309,309,309,309,308,308,308,308,308,308,307,307,307,307,307,307,307,306,306,306,306,306,306,305,305,305,305,305,305,304,304,304,304,304,304,304,303,303,303,303,303,303,302,302,302,302,302,302,302,301,301,301,301,301,301,301,300,300,300,300,300,300,299,299,299,299,299,299,299,298,298,298,298,298,298,298,297,297,297,297,297,297,297,296,296,296,296,296,296,296,295,295,295,295,295,295,295,294,294,294,294,294,294,294,293,293,293,293,293,293,293,292,292,292,292,292,292,292,291,291,291,291,291,291,291,290,290,290,290,290,290,290,289,289,289,289,289,289,288,288,288,288,288,288,288,287,287,287,287,287,287,287,286,286,286,286,286,286,286,285,285,285,285,285,285,285,284,284,284,284,284,284,284,283,283,283,283,283,283,282,282,282,282,282,282,282,281,281,281,281,281,281,281,280,280,280,280,280,280,279,279,279,279,279,279,279,278,278,278,278,278,278,277,277,277,277,277,277,276,276,276,276,276,276,275,275,275,275,275,275,274,274,274,274,274,274,273,273,273,273,273,273,272,272,272,272,272,272,271,271,271,271,271,270,270,270,270,270,270,269,269,269,269,269,268,268,268,268,268,267,267,267,267,267,266,266,266,266,266,265,265,265,265,265,264,264,264,264,263,263,263,263,263,262,262,262,262,261,261,261,261,260,260,260,260,259,259,259,259,258,258,258,258,257,257,257,257,256,256,256,255,255,255,255,254,254,254,253,253,253,252,252,252,251,251,251,250,250,250,249,249,248,248,248,247,247,246,246,246,245,245,244,244,243,243,242,242,241,241,240,240,239,238,238,237,236,236,235,234,233,232,232,232,232,232,232,232,232,232,232,232,232,232,232,232,232,232,232,172,172,172,172,172
-
-
-
-
-const unsigned int ThermistorLookupTable[630] = {THERMISTOR_LOOK_UP_TABLE_VALUES};
-
-
-
-
-
+const unsigned int ThermistorLookupTable[1024] = {THERMISTOR_LOOK_UP_TABLE_VALUES};
 
 
 TYPE_COOLING_GLOBALS global_data_A36926;
 
 void DoSF6Management(void);
 
-#define TEMPERATURE_SWITCH_FILTER_TIME            200        // 2 seconds
-
-#define COOLING_INTERFACE_BOARD_TEST_TIME         100        // 1 second
-
-
-#define MINIMUM_FLOW_MAGNETRON                    4000
-#define MINIMUM_FLOW_LINAC                        6700
-#define MINIMUM_FLOW_HV_TANK                      8000
-#define MINIMUM_FLOW
-
-
-#define STARTUP_LED_FLASH_TIME       400       // 4 Seconds
-
-
-#define FLOW_METER_ML_PER_HZ      81
-#define FLOW_METER_CONSTANT       841
-
-#define PERIOD_MAX_FREQUENCY      70   // 558 Hz
-#define FLOW_METER_MIN_FREQUENCY  15
-#define PWM_MAX_PERIOD            1954 // This is equiv to 10Hz 
-
-
-#define SF6_STATE_TEST       10
-#define SF6_STATE_CHARGING   20
-#define SF6_STATE_DELAY      30
-
-#define MINIMUM_COOLANT_TEMP_FOR_SF6_MANAGEMENT  292   // 292 Deg K / 20 Deg C
-#define MINIMUM_PRESSURE_FOR_SF6_MANAGEMENT      3000  // 30 PSI   
-
-#define SF6_MINIMUM_TARGET_PRESSURE              4000  // 40 PSI
-#define SF6_MAXIMUM_TARGET_PRESSURE              4200  // 42 PSI
-
-#define SF6_TIME_CHARGING                        500 // 5 Seconds
-#define SF6_TIME_DELAY                           500 // 5 Seconds
-
-
-
-//#define COOLANT_TRIP_TEMPERATURE        308 // This is in Deg K units
-//#define CABINET_TRIP_TEMPERATURE        318 // This is in Deg K units
-
-#define COOLANT_TRIP_THERMISTOR_VOLTAGE       3936  // This is the voltage (in millivolts) that indicates a temerperature of 36 Deg C.  If the thermistor voltage is less than this it should trip
-#define CABINET_TRIP_THERMISTOR_VOLTAGE       3040  // This is the voltage (in millivolts) that indicates a temerperature of 46 Deg C.  If the thermistor voltage is less than this it should trip
-
-#define TEMPERATURE_SENSOR_FIXED_SCALE         .15625
-
-#define ANALOG_TEMPERATURE_TRIP_TIME    1000  // 10 Seconds
-
-
-#define PWR_5V_OVER_FLT                  5500
-#define PWR_5V_UNDER_FLT                 4500
-#define PWR_15V_OVER_FLT                 16000
-#define PWR_15V_UNDER_FLT                14000
-#define PWR_NEG_15V_OVER_FLT             16000
-#define PWR_NEG_15V_UNDER_FLT            14000
-
-
-
-
-
-#define SF6_SENSOR_FIXED_SCALE                 .19629   // DPARKER NEED TO TEST
-#define SF6_SENSOR_FIXED_OFFSET                -12736    // Calculated 4mA Offset
-#define SF6_UNDER_PRESSURE_TRIP                3700     // 37 PSI DPARKER NEED TO TEST
-#define SF6_PRESSURE_TRIP_TIME                 1000     // 10 seconds
 
 
 
@@ -218,67 +147,80 @@ void InitializeFlowMeter(TYPE_FLOW_READING* flow_ptr, unsigned int min_flow, uns
 
 
 void UpdateFlowMeterInputCapture(TYPE_FLOW_READING* flow_ptr) {
-  unsigned int current_period;
-  unsigned int latest_capture;
   unsigned int latest_tmr;
-  unsigned int interrupt_active;
-  // Figure out if the interupt flag is active
-  interrupt_active = 0;
-  if (flow_ptr->ICXBUF_ptr == &IC1BUF) {
-    if (_IC1IF) {
-      interrupt_active = 1;
-      _IC1IF = 0;
-    }
-  } else if (flow_ptr->ICXBUF_ptr == &IC2BUF) {
-    if (_IC2IF) {
-      interrupt_active = 1;
-      _IC2IF = 0;
-    }
-  } else if (flow_ptr->ICXBUF_ptr == &IC3BUF) {
-    if (_IC3IF) {
-      interrupt_active = 1;
-      _IC3IF = 0;
-    }
-  } else if (flow_ptr->ICXBUF_ptr == &IC4BUF) {
-    if (_IC4IF) {
-      interrupt_active = 1;
-      _IC4IF = 0;
-    }
-  } else if (flow_ptr->ICXBUF_ptr == &IC5BUF) {
-    if (_IC5IF) {
-      interrupt_active = 1;
-      _IC5IF = 0;
-    }
-  } else if (flow_ptr->ICXBUF_ptr == &IC6BUF) {
-    if (_IC6IF) {
-      interrupt_active = 1;
-      _IC6IF = 0;
-    }
+
+  // Check to see if there is an overflow
+  latest_tmr     = *flow_ptr->TMRX_ptr;
+  latest_tmr    -= flow_ptr->previous_timer_reading;
+  if (latest_tmr >= PWM_MAX_PERIOD) { 
+    flow_ptr->long_pulse = 1;
+    flow_ptr->array_index++;
+    flow_ptr->array_index &= 0x000F;
+    flow_ptr->period_array[flow_ptr->array_index] = PWM_MAX_PERIOD;
   }
 
-  if (interrupt_active) {
-    latest_tmr     = *flow_ptr->TMRX_ptr;
-    latest_tmr    -= flow_ptr->previous_timer_reading;
-    if (latest_tmr >= PWM_MAX_PERIOD) { 
-      flow_ptr->long_pulse = 1;
-      flow_ptr->array_index++;
-      flow_ptr->array_index &= 0x000F;
-      flow_ptr->period_array[flow_ptr->array_index] = PWM_MAX_PERIOD;
+  // Figure out if the interupt flag is active and if so update that flow meter
+  if (flow_ptr->ICXBUF_ptr == &IC1BUF) {
+    if (_IC1IF) {
+      _IC1IF = 0;
+      CaptureInput(flow_ptr);
     }
-    
-    while((*(flow_ptr->ICXBUF_ptr + 2)) & 0x0008) {
-      // ICBNE bit is set
-      latest_capture = *flow_ptr->ICXBUF_ptr;
-      current_period = latest_capture - flow_ptr->previous_timer_reading;
-      flow_ptr->previous_timer_reading = latest_capture;
-      if (flow_ptr->long_pulse) {
-	flow_ptr->long_pulse = 0;
-	current_period = PWM_MAX_PERIOD;
-      }
-      flow_ptr->array_index++;
-      flow_ptr->array_index &= 0x000F;
-      flow_ptr->period_array[flow_ptr->array_index] = current_period;
+  }
+  
+  if (flow_ptr->ICXBUF_ptr == &IC2BUF) {
+    if (_IC2IF) {
+      _IC2IF = 0;
+      CaptureInput(flow_ptr);
     }
+  }
+  
+  if (flow_ptr->ICXBUF_ptr == &IC3BUF) {
+    if (_IC3IF) {
+      _IC3IF = 0;
+      CaptureInput(flow_ptr);
+    }
+  } 
+  
+  if (flow_ptr->ICXBUF_ptr == &IC4BUF) {
+    if (_IC4IF) {
+      _IC4IF = 0;
+      CaptureInput(flow_ptr);
+    }
+  } 
+  
+  if (flow_ptr->ICXBUF_ptr == &IC5BUF) {
+    if (_IC5IF) {
+      _IC5IF = 0;
+      CaptureInput(flow_ptr);
+    }
+  } 
+
+  if (flow_ptr->ICXBUF_ptr == &IC6BUF) {
+    if (_IC6IF) {
+      _IC6IF = 0;
+      CaptureInput(flow_ptr);
+    }
+  }
+}
+
+void CaptureInput(TYPE_FLOW_READING* flow_ptr) {
+  unsigned int latest_capture;
+  unsigned int current_period;
+
+  while((*((flow_ptr->ICXBUF_ptr) + 1)) & 0x0008) {
+    //while(IC1CON & 0x0008) {
+    // ICBNE bit is set
+
+    latest_capture = *flow_ptr->ICXBUF_ptr;
+    current_period = latest_capture - flow_ptr->previous_timer_reading;
+    flow_ptr->previous_timer_reading = latest_capture;
+    if (flow_ptr->long_pulse) {
+      flow_ptr->long_pulse = 0;
+      current_period = PWM_MAX_PERIOD;
+    }
+    flow_ptr->array_index++;
+    flow_ptr->array_index &= 0x000F;
+    flow_ptr->period_array[flow_ptr->array_index] = current_period;
   }
 }
 
@@ -311,12 +253,17 @@ unsigned int CheckFlowMeterFault(TYPE_FLOW_READING* flow_ptr) {
   if (period <= PERIOD_MAX_FREQUENCY) {
     period = PERIOD_MAX_FREQUENCY;
   }
+  //period_lng = 390620;
+  //period_lng /= period;
+  //flow_ptr->frequency = period_lng;  // This is now in deci
+  //flow_ptr->frequency = RCFilterNTau(flow_ptr->frequency, period_lng, 12);
   flow_ptr->frequency = 39062 / period;
   
   if (flow_ptr->frequency < FLOW_METER_MIN_FREQUENCY) {
     flow_ptr->flow_reading = 0;
   } else {
     flow_ptr->flow_reading = FLOW_METER_ML_PER_HZ*flow_ptr->frequency + FLOW_METER_CONSTANT;
+    //flow_ptr->flow_reading = RCFilterNTau(flow_ptr->flow_reading, (FLOW_METER_ML_PER_HZ*flow_ptr->frequency + FLOW_METER_CONSTANT), RC_FILTER_256_TAU);
   }
 
   if (flow_ptr->minimum_flow == 0) {
@@ -334,9 +281,9 @@ unsigned int CheckFlowMeterFault(TYPE_FLOW_READING* flow_ptr) {
 
 unsigned int ConvertThermistorVoltageToKelvin(unsigned int thermistor_voltage) {
   unsigned int thermistor_index;
-  thermistor_index = (thermistor_voltage >> 4);
-  if (thermistor_index > 625) {
-    thermistor_index = 625;
+  thermistor_index = (thermistor_voltage >> 2);
+  if (thermistor_index > 1023) {
+    thermistor_index = 1023;
   }
   return ThermistorLookupTable[thermistor_index];
   
@@ -383,6 +330,39 @@ void DoA36746(void) {
     global_data_A36926.cabinet_temperature_kelvin = ConvertThermistorVoltageToKelvin(global_data_A36926.analog_input_thermistor_2.reading_scaled_and_calibrated);
     global_data_A36926.linac_temperature_kelvin   = ConvertThermistorVoltageToKelvin(global_data_A36926.analog_input_thermistor_3.reading_scaled_and_calibrated);
 
+    ETMCanSlaveSetDebugRegister(0x0, global_data_A36926.flow_meter_1_magnetron.period_array[0]);
+    ETMCanSlaveSetDebugRegister(0x1, global_data_A36926.flow_meter_1_magnetron.period_array[1]);
+    ETMCanSlaveSetDebugRegister(0x2, global_data_A36926.flow_meter_1_magnetron.array_index);
+    ETMCanSlaveSetDebugRegister(0x3, global_data_A36926.flow_meter_1_magnetron.long_pulse);
+
+    ETMCanSlaveSetDebugRegister(0x4, global_data_A36926.flow_meter_1_magnetron.minimum_flow);
+    ETMCanSlaveSetDebugRegister(0x5, global_data_A36926.flow_meter_1_magnetron.frequency);
+    ETMCanSlaveSetDebugRegister(0x6, global_data_A36926.flow_meter_1_magnetron.flow_reading);
+
+
+    // Update all the logging data
+    slave_board_data.log_data[0] = global_data_A36926.flow_meter_1_magnetron.flow_reading;
+    slave_board_data.log_data[1] = global_data_A36926.flow_meter_2_linac.flow_reading;
+    slave_board_data.log_data[2] = global_data_A36926.flow_meter_3_hv_tank.flow_reading;
+    slave_board_data.log_data[3] = global_data_A36926.flow_meter_4_hvps.flow_reading;
+    slave_board_data.log_data[4] = global_data_A36926.flow_meter_5_circulator.flow_reading;
+    slave_board_data.log_data[5] = global_data_A36926.flow_meter_6_alternate.flow_reading;
+
+    slave_board_data.log_data[8] = global_data_A36926.linac_temperature_kelvin;
+    slave_board_data.log_data[9] = global_data_A36926.cabinet_temperature_kelvin;
+    slave_board_data.log_data[10] = global_data_A36926.coolant_temperature_kelvin;
+    
+    slave_board_data.log_data[12] = global_data_A36926.SF6_pulses_available;
+    slave_board_data.log_data[13] = 0; // DPARKER what goes here
+    slave_board_data.log_data[14] = global_data_A36926.SF6_bottle_pulses_remaining;
+
+
+    
+
+    
+    
+
+
     // Converters the PWM readings into flow and stores in the PWM structure
     //CalculateFlowMeterFlow(&global_data_A36926.flow_meter_1_magnetron);
     //CalculateFlowMeterFlow(&global_data_A36926.flow_meter_2_linac);
@@ -403,7 +383,7 @@ void DoA36746(void) {
 }
 
 void UpdateFaults(void) {
-  
+
   if (ETMCanSlaveGetComFaultStatus()) {
     _FAULT_CAN_COMMUNICATION_LATCHED = 1;
     global_data_A36926.fault_active = 1;
@@ -470,7 +450,6 @@ void UpdateFaults(void) {
     }
   }
 
-#ifdef LINAC_6_4
   if (ETMDigitalFilteredOutput(&global_data_A36926.digital_input_8_coolant_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
     _FAULT_COOLANT_TEMP_SWITCH = 1;
   } else {
@@ -478,7 +457,7 @@ void UpdateFaults(void) {
       _FAULT_COOLANT_TEMP_SWITCH = 0;
     }
   }
-#endif
+
     
   // Check for over temperature on Thermistor 1
   // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
@@ -490,7 +469,6 @@ void UpdateFaults(void) {
     }
   }
 
-#ifdef LINAC_6_4    
   // Check for over temperature on Thermistor 2
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_2)) {
     // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
@@ -509,7 +487,7 @@ void UpdateFaults(void) {
       _FAULT_CABINET_OVER_TEMP = 0;
     }
   }
-#endif    
+
 
   // Check for under pressure on SF6
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_SF6_pressure)) {
@@ -576,11 +554,7 @@ void InitializeA36746(void) {
   ETMEEPromConfigureExternalDevice(EEPROM_SIZE_8K_BYTES, FCY_CLK, 400000, EEPROM_I2C_ADDRESS_0, 1);
 
   // Initialize the Can module
-#define AGILE_REV 77
-#define SERIAL_NUMBER 100
-
-  // Initialize the Can module
-  ETMCanSlaveInitialize(CAN_PORT_1, FCY_CLK, ETM_CAN_ADDR_HV_LAMBDA_BOARD, _PIN_RG13, 4, _PIN_RA7, _PIN_RG12);
+  ETMCanSlaveInitialize(CAN_PORT_1, FCY_CLK, ETM_CAN_ADDR_COOLING_INTERFACE_BOARD, _PIN_RG13, 4, _PIN_RA7, _PIN_RG12);
   ETMCanSlaveLoadConfiguration(36926, 002, FIRMWARE_AGILE_REV, FIRMWARE_BRANCH, FIRMWARE_BRANCH_REV);
 
 
@@ -614,7 +588,7 @@ void InitializeA36746(void) {
 			   OFFSET_ZERO,
 			   ANALOG_INPUT_3,
 			   NO_OVER_TRIP,
-			   CABINET_TRIP_THERMISTOR_VOLTAGE,
+			   LINAC_TRIP_THERMISTOR_VOLTAGE,
 			   NO_TRIP_SCALE,
 			   NO_FLOOR,
 			   NO_RELATIVE_COUNTER,
@@ -684,12 +658,12 @@ void InitializeA36746(void) {
     global_data_A36926.SF6_bottle_pulses_remaining = 700;
   }
 
-  InitializeFlowMeter(&global_data_A36926.flow_meter_1_magnetron,  MINIMUM_FLOW_MAGNETRON, (unsigned int*)&IC1BUF, (unsigned int*)&TMR2);
-  InitializeFlowMeter(&global_data_A36926.flow_meter_2_linac,      MINIMUM_FLOW_MAGNETRON, (unsigned int*)&IC2BUF, (unsigned int*)&TMR2);
-  InitializeFlowMeter(&global_data_A36926.flow_meter_3_hv_tank,    MINIMUM_FLOW_MAGNETRON, (unsigned int*)&IC3BUF, (unsigned int*)&TMR2);
-  InitializeFlowMeter(&global_data_A36926.flow_meter_4_hvps,       MINIMUM_FLOW_MAGNETRON, (unsigned int*)&IC4BUF, (unsigned int*)&TMR2);
-  InitializeFlowMeter(&global_data_A36926.flow_meter_5_circulator, MINIMUM_FLOW_MAGNETRON, (unsigned int*)&IC5BUF, (unsigned int*)&TMR2);
-  InitializeFlowMeter(&global_data_A36926.flow_meter_6_alternate,  MINIMUM_FLOW_MAGNETRON, (unsigned int*)&IC6BUF, (unsigned int*)&TMR2);
+  InitializeFlowMeter(&global_data_A36926.flow_meter_1_magnetron,  MINIMUM_FLOW_MAGNETRON,  (unsigned int*)&IC1BUF, (unsigned int*)&TMR2);
+  InitializeFlowMeter(&global_data_A36926.flow_meter_2_linac,      MINIMUM_FLOW_LINAC,      (unsigned int*)&IC2BUF, (unsigned int*)&TMR2);
+  InitializeFlowMeter(&global_data_A36926.flow_meter_3_hv_tank,    MINIMUM_FLOW_HV_TANK,    (unsigned int*)&IC3BUF, (unsigned int*)&TMR2);
+  InitializeFlowMeter(&global_data_A36926.flow_meter_4_hvps,       MINIMUM_FLOW_HVPS,       (unsigned int*)&IC4BUF, (unsigned int*)&TMR2);
+  InitializeFlowMeter(&global_data_A36926.flow_meter_5_circulator, MINIMUM_FLOW_CIRCULATOR, (unsigned int*)&IC5BUF, (unsigned int*)&TMR2);
+  InitializeFlowMeter(&global_data_A36926.flow_meter_6_alternate,  MINIMUM_FLOW_SPARE,      (unsigned int*)&IC6BUF, (unsigned int*)&TMR2);
 
   // DPARKER consider moving ICXCON to Initialize Flow Meter
 #define ICXCON_VALUE  (IC_TIMER2_SRC & IC_INT_1CAPTURE & IC_EVERY_EDGE)
@@ -909,7 +883,21 @@ void ETMCanSlaveExecuteCMDBoardSpecific(ETMCanMessage* message_ptr) {
       /*
 	Place all board specific commands here
       */
+
+    case ETM_CAN_REGISTER_COOLING_CMD_SF6_PULSE_LIMIT_OVERRIDE:
+      global_data_A36926.SF6_pulses_available = 25;
+      ETMEEPromWritePage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A36926.SF6_pulses_available);
+      break;
       
+    case ETM_CAN_REGISTER_COOLING_CMD_RESET_BOTTLE_COUNT:
+      global_data_A36926.SF6_bottle_pulses_remaining = message_ptr->word0;
+      ETMEEPromWritePage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A36926.SF6_pulses_available);
+      break;
+      
+    case ETM_CAN_REGISTER_COOLING_CMD_SF6_LEAK_LIMIT_OVERRIDE:
+      global_data_A36926.SF6_low_pressure_override_counter = message_ptr->word0;
+      break;
+
     default:
       //local_can_errors.invalid_index++;
       break;
