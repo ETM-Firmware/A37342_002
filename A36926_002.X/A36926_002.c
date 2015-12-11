@@ -83,7 +83,8 @@ void DoStateMachine(void) {
       if (global_data_A36926.test_timer >= COOLING_INTERFACE_BOARD_TEST_TIME) {
 	global_data_A36926.control_state = STATE_READY;
       }
-      if (global_data_A36926.fault_active) {
+
+      if (_FAULT_REGISTER) {
 	global_data_A36926.control_state = STATE_NOT_READY;
       }
     }
@@ -95,10 +96,9 @@ void DoStateMachine(void) {
     _CONTROL_NOT_READY = 0;
     while (global_data_A36926.control_state == STATE_READY) {
       DoA36746();
-      if (global_data_A36926.fault_active) {
+      if (_FAULT_REGISTER) {
 	global_data_A36926.control_state = STATE_NOT_READY;
       }
-
     }
     break;
 
@@ -309,12 +309,15 @@ void DoA36746(void) {
 
     DoSF6Management();
 
-    if (global_data_A36926.control_state == STATE_TESTING) {
-      global_data_A36926.test_timer++;
+    global_data_A36926.test_timer++;
+    if (global_data_A36926.test_timer > COOLING_INTERFACE_BOARD_TEST_TIME) {
+      global_data_A36926.test_timer = COOLING_INTERFACE_BOARD_TEST_TIME;
     }
     
-    if (global_data_A36926.control_state == STATE_STARTUP) {
-      global_data_A36926.startup_counter++;
+    
+    global_data_A36926.startup_counter++;
+    if (global_data_A36926.startup_counter > STARTUP_LED_FLASH_TIME) {
+      global_data_A36926.startup_counter = STARTUP_LED_FLASH_TIME;
     }
   
 
@@ -338,6 +341,7 @@ void DoA36746(void) {
     ETMCanSlaveSetDebugRegister(0x4, global_data_A36926.flow_meter_1_magnetron.minimum_flow);
     ETMCanSlaveSetDebugRegister(0x5, global_data_A36926.flow_meter_1_magnetron.frequency);
     ETMCanSlaveSetDebugRegister(0x6, global_data_A36926.flow_meter_1_magnetron.flow_reading);
+    ETMCanSlaveSetDebugRegister(0x7, global_data_A36926.control_state);
 
 
     // Update all the logging data
@@ -353,7 +357,7 @@ void DoA36746(void) {
     slave_board_data.log_data[10] = global_data_A36926.coolant_temperature_kelvin;
     
     slave_board_data.log_data[12] = global_data_A36926.SF6_pulses_available;
-    slave_board_data.log_data[13] = 0; // DPARKER what goes here
+    slave_board_data.log_data[13] = global_data_A36926.SF6_low_pressure_override_counter;
     slave_board_data.log_data[14] = global_data_A36926.SF6_bottle_pulses_remaining;
 
 
@@ -386,7 +390,7 @@ void UpdateFaults(void) {
 
   if (ETMCanSlaveGetComFaultStatus()) {
     _FAULT_CAN_COMMUNICATION_LATCHED = 1;
-    global_data_A36926.fault_active = 1;
+    //DPARKER global_data_A36926.fault_active = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CAN_COMMUNICATION_LATCHED = 0;
@@ -402,7 +406,7 @@ void UpdateFaults(void) {
   }
   
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_2_linac)) {
-    _FAULT_FLOW_SENSOR_2 = 1;
+    // DPARKER _FAULT_FLOW_SENSOR_2 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_2 = 0;
@@ -410,7 +414,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_3_hv_tank)) {
-    _FAULT_FLOW_SENSOR_3 = 1;
+    // DPARKER _FAULT_FLOW_SENSOR_3 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_3 = 0;
@@ -418,7 +422,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_4_hvps)) {
-    _FAULT_FLOW_SENSOR_4 = 1;
+    // DPARKER _FAULT_FLOW_SENSOR_4 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_4 = 0;
@@ -426,7 +430,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_5_circulator)) {
-    _FAULT_FLOW_SENSOR_5 = 1;
+    // DPARKER _FAULT_FLOW_SENSOR_5 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_5 = 0;
@@ -434,7 +438,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_6_alternate)) {
-    _FAULT_FLOW_SENSOR_6 = 1;
+    // DPARKER _FAULT_FLOW_SENSOR_6 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_6 = 0;
@@ -443,7 +447,7 @@ void UpdateFaults(void) {
 
     
   if (ETMDigitalFilteredOutput(&global_data_A36926.digital_input_7_cabinet_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
-    _FAULT_CABINET_TEMP_SWITCH = 1;
+    // DPARKER _FAULT_CABINET_TEMP_SWITCH = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_TEMP_SWITCH = 0;
@@ -451,7 +455,7 @@ void UpdateFaults(void) {
   }
 
   if (ETMDigitalFilteredOutput(&global_data_A36926.digital_input_8_coolant_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
-    _FAULT_COOLANT_TEMP_SWITCH = 1;
+    // DPARKER _FAULT_COOLANT_TEMP_SWITCH = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_COOLANT_TEMP_SWITCH = 0;
@@ -462,7 +466,7 @@ void UpdateFaults(void) {
   // Check for over temperature on Thermistor 1
   // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_1)) {
-    _FAULT_CABINET_OVER_TEMP = 1;
+    // DPARKER _FAULT_CABINET_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_OVER_TEMP = 0;
@@ -472,7 +476,7 @@ void UpdateFaults(void) {
   // Check for over temperature on Thermistor 2
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_2)) {
     // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
-    _FAULT_COOLANT_OVER_TEMP = 1;
+    // DPARKER _FAULT_COOLANT_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_COOLANT_OVER_TEMP = 0;
@@ -481,7 +485,7 @@ void UpdateFaults(void) {
       
   // Check for over temperature on Thermistor 3
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_3)) {
-    _FAULT_CABINET_OVER_TEMP = 1;
+    // DPARKER _FAULT_CABINET_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_OVER_TEMP = 0;
@@ -491,8 +495,8 @@ void UpdateFaults(void) {
 
   // Check for under pressure on SF6
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_SF6_pressure)) {
-    _FAULT_SF6_UNDER_PRESSURE = 1;
-    global_data_A36926.fault_active = 1;
+    // DPARKER _FAULT_SF6_UNDER_PRESSURE = 1;
+    // DPARKER global_data_A36926.fault_active = 1;
   } else if (ETMCanSlaveGetSyncMsgResetEnable()) {
     _FAULT_SF6_UNDER_PRESSURE = 0;
   }
@@ -764,10 +768,10 @@ void DoSF6Management(void) {
       global_data_A36926.SF6_bottle_pulses_remaining--;
     }
     
-
-    ETMEEPromWritePage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A36926.SF6_pulses_available);
     // This writes SF6_pulses_available and SF6_bottle_pulses_remaining to the external EEPROM with a single I2C command (and single FLASH write cycle)
+    ETMEEPromWritePage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A36926.SF6_pulses_available);
 
+    
     _STATUS_SF6_FILL_REQUIRED = 1;
     global_data_A36926.SF6_fill_threshold = SF6_MAXIMUM_TARGET_PRESSURE;
     global_data_A36926.SF6_state_charging_counter = 0;
