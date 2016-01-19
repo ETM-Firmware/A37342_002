@@ -406,7 +406,7 @@ void UpdateFaults(void) {
   }
   
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_2_linac)) {
-    // DPARKER _FAULT_FLOW_SENSOR_2 = 1;
+    _FAULT_FLOW_SENSOR_2 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_2 = 0;
@@ -414,7 +414,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_3_hv_tank)) {
-    // DPARKER _FAULT_FLOW_SENSOR_3 = 1;
+    _FAULT_FLOW_SENSOR_3 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_3 = 0;
@@ -422,7 +422,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_4_hvps)) {
-    // DPARKER _FAULT_FLOW_SENSOR_4 = 1;
+    _FAULT_FLOW_SENSOR_4 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_4 = 0;
@@ -430,7 +430,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_5_circulator)) {
-    // DPARKER _FAULT_FLOW_SENSOR_5 = 1;
+    _FAULT_FLOW_SENSOR_5 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_5 = 0;
@@ -438,7 +438,7 @@ void UpdateFaults(void) {
   }
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_6_alternate)) {
-    // DPARKER _FAULT_FLOW_SENSOR_6 = 1;
+    _FAULT_FLOW_SENSOR_6 = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_6 = 0;
@@ -447,7 +447,7 @@ void UpdateFaults(void) {
 
     
   if (ETMDigitalFilteredOutput(&global_data_A36926.digital_input_7_cabinet_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
-    // DPARKER _FAULT_CABINET_TEMP_SWITCH = 1;
+    _FAULT_CABINET_TEMP_SWITCH = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_TEMP_SWITCH = 0;
@@ -455,7 +455,7 @@ void UpdateFaults(void) {
   }
 
   if (ETMDigitalFilteredOutput(&global_data_A36926.digital_input_8_coolant_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
-    // DPARKER _FAULT_COOLANT_TEMP_SWITCH = 1;
+    _FAULT_COOLANT_TEMP_SWITCH = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_COOLANT_TEMP_SWITCH = 0;
@@ -466,7 +466,7 @@ void UpdateFaults(void) {
   // Check for over temperature on Thermistor 1
   // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_1)) {
-    // DPARKER _FAULT_CABINET_OVER_TEMP = 1;
+    _FAULT_CABINET_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_OVER_TEMP = 0;
@@ -476,7 +476,7 @@ void UpdateFaults(void) {
   // Check for over temperature on Thermistor 2
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_2)) {
     // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
-    // DPARKER _FAULT_COOLANT_OVER_TEMP = 1;
+    _FAULT_COOLANT_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_COOLANT_OVER_TEMP = 0;
@@ -485,7 +485,7 @@ void UpdateFaults(void) {
       
   // Check for over temperature on Thermistor 3
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_3)) {
-    // DPARKER _FAULT_CABINET_OVER_TEMP = 1;
+    _FAULT_CABINET_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_OVER_TEMP = 0;
@@ -495,7 +495,7 @@ void UpdateFaults(void) {
 
   // Check for under pressure on SF6
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_SF6_pressure)) {
-    // DPARKER _FAULT_SF6_UNDER_PRESSURE = 1;
+    _FAULT_SF6_UNDER_PRESSURE = 1;
     // DPARKER global_data_A36926.fault_active = 1;
   } else if (ETMCanSlaveGetSyncMsgResetEnable()) {
     _FAULT_SF6_UNDER_PRESSURE = 0;
