@@ -455,7 +455,7 @@ void UpdateFaults(void) {
   }
 
   if (ETMDigitalFilteredOutput(&global_data_A36926.digital_input_8_coolant_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
-    _FAULT_COOLANT_TEMP_SWITCH = 1;
+    // _FAULT_COOLANT_TEMP_SWITCH = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_COOLANT_TEMP_SWITCH = 0;
@@ -466,31 +466,31 @@ void UpdateFaults(void) {
   // Check for over temperature on Thermistor 1
   // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_1)) {
-    _FAULT_CABINET_OVER_TEMP = 1;
-  } else {
-    if (ETMCanSlaveGetSyncMsgResetEnable()) {
-      _FAULT_CABINET_OVER_TEMP = 0;
-    }
-  }
-
-  // Check for over temperature on Thermistor 2
-  if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_2)) {
-    // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
     _FAULT_COOLANT_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_COOLANT_OVER_TEMP = 0;
     }
   }
-      
-  // Check for over temperature on Thermistor 3
-  if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_3)) {
+
+  // Check for over temperature on Thermistor 2
+  if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_2)) {
+    // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
     _FAULT_CABINET_OVER_TEMP = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CABINET_OVER_TEMP = 0;
     }
   }
+      
+  // Check for over temperature on Thermistor 3
+//  if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_thermistor_3)) {
+//    _FAULT_CABINET_OVER_TEMP = 1;
+//  } else {
+//    if (ETMCanSlaveGetSyncMsgResetEnable()) {
+//      _FAULT_CABINET_OVER_TEMP = 0;
+//    }
+//  }
 
 
   // Check for under pressure on SF6
