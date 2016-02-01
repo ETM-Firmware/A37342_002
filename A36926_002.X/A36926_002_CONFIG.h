@@ -12,8 +12,8 @@
 // Configure the trip points for the 2.5 System
 
 // Thermistor Fault Setup
-#define COOLANT_TRIP_THERMISTOR_VOLTAGE          3936  // This is the voltage (in millivolts) that indicates a temerperature of 36 Deg C.  NTC voltage less than this is over temp
-#define CABINET_TRIP_THERMISTOR_VOLTAGE          3040  // This is the voltage (in millivolts) that indicates a temerperature of 46 Deg C.  NTC voltage less than this is over temp
+#define COOLANT_TRIP_THERMISTOR_VOLTAGE          1544 //3936  // or 1544? This is the voltage (in millivolts) that indicates a temerperature of 36 Deg C.  NTC voltage less than this is over temp
+#define CABINET_TRIP_THERMISTOR_VOLTAGE          1184 //3040  // or 1184? This is the voltage (in millivolts) that indicates a temerperature of 46 Deg C.  NTC voltage less than this is over temp
 #define LINAC_TRIP_THERMISTOR_VOLTAGE            0     // This is the voltage (in millivolts) that indicates a temerperature of > 105 Deg C.  NTC voltage less than this is over temp
 #define ANALOG_TEMPERATURE_TRIP_TIME             1000  // 10 Seconds
 

@@ -353,8 +353,8 @@ void DoA36746(void) {
     slave_board_data.log_data[5] = global_data_A36926.flow_meter_6_alternate.flow_reading;
 
     slave_board_data.log_data[8] = global_data_A36926.linac_temperature_kelvin;
-    slave_board_data.log_data[9] = global_data_A36926.cabinet_temperature_kelvin;
-    slave_board_data.log_data[10] = global_data_A36926.coolant_temperature_kelvin;
+    slave_board_data.log_data[9] = global_data_A36926.coolant_temperature_kelvin;
+    slave_board_data.log_data[10] = global_data_A36926.cabinet_temperature_kelvin;
     
     slave_board_data.log_data[12] = global_data_A36926.SF6_pulses_available;
     slave_board_data.log_data[13] = global_data_A36926.SF6_low_pressure_override_counter;
