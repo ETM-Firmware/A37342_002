@@ -341,7 +341,7 @@ void DoA36746(void) {
     ETMCanSlaveSetDebugRegister(0x4, global_data_A36926.flow_meter_1_magnetron.minimum_flow);
     ETMCanSlaveSetDebugRegister(0x5, global_data_A36926.flow_meter_1_magnetron.frequency);
     ETMCanSlaveSetDebugRegister(0x6, global_data_A36926.flow_meter_1_magnetron.flow_reading);
-    ETMCanSlaveSetDebugRegister(0x7, global_data_A36926.control_state);
+    ETMCanSlaveSetDebugRegister(0x7, global_data_A36926.analog_input_SF6_pressure.filtered_adc_reading);//global_data_A36926.control_state);
 
 
     // Update all the logging data
@@ -355,7 +355,7 @@ void DoA36746(void) {
     slave_board_data.log_data[8] = global_data_A36926.linac_temperature_kelvin;
     slave_board_data.log_data[9] = global_data_A36926.coolant_temperature_kelvin;
     slave_board_data.log_data[10] = global_data_A36926.cabinet_temperature_kelvin;
-    
+    slave_board_data.log_data[11] = global_data_A36926.analog_input_SF6_pressure.reading_scaled_and_calibrated;
     slave_board_data.log_data[12] = global_data_A36926.SF6_pulses_available;
     slave_board_data.log_data[13] = global_data_A36926.SF6_low_pressure_override_counter;
     slave_board_data.log_data[14] = global_data_A36926.SF6_bottle_pulses_remaining;

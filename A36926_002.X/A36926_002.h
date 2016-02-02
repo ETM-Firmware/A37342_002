@@ -321,8 +321,8 @@ typedef struct {
 
 #define TEMPERATURE_SENSOR_FIXED_SCALE         .15625
 
-#define SF6_SENSOR_FIXED_SCALE                 .19629   
-#define SF6_SENSOR_FIXED_OFFSET                -12736   // Calculated 4mA Offset
+#define SF6_SENSOR_FIXED_SCALE                 .97656 //.19629   
+#define SF6_SENSOR_FIXED_OFFSET                -2560 //-12736   // Calculated 4mA Offset
 
 
 #define SF6_STATE_TEST       10
