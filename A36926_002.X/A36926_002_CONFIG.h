@@ -21,9 +21,9 @@
 #define TEMPERATURE_SWITCH_FILTER_TIME           200   // 2 seconds
 
 // Flow Meter Fault Setup
-#define MINIMUM_FLOW_MAGNETRON                   8000
-#define MINIMUM_FLOW_LINAC                       6700
-#define MINIMUM_FLOW_HV_TANK                     8000
+#define MINIMUM_FLOW_MAGNETRON                   3800
+#define MINIMUM_FLOW_LINAC                       6500
+#define MINIMUM_FLOW_HV_TANK                     7800
 #define MINIMUM_FLOW_HVPS                        0
 #define MINIMUM_FLOW_CIRCULATOR                  0
 #define MINIMUM_FLOW_SPARE                       0

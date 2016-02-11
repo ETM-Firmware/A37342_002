@@ -333,7 +333,7 @@ typedef struct {
 #define COOLING_INTERFACE_BOARD_TEST_TIME     100   // 1 second
 
 #define FLOW_METER_ML_PER_HZ      81
-#define FLOW_METER_CONSTANT       8410
+#define FLOW_METER_CONSTANT       841
 
 #define PERIOD_MAX_FREQUENCY      70   // 558 Hz
 #define FLOW_METER_MIN_FREQUENCY  15
