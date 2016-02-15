@@ -212,7 +212,7 @@
 #define _STATUS_SF6_FILL_REQUIRED                       _LOGGED_STATUS_3
 #define _STATUS_SF6_NO_PULSES_AVAILABLE                 _LOGGED_STATUS_4
 #define _STATUS_SF6_FILLING                             _LOGGED_STATUS_5
-
+#define _STATUS_FLOW_OK                                 _LOGGED_STATUS_6
 
 
 // -------------------- A36746 FAULTS/WARNINGS CONFIGURATION-------------------- //

@@ -388,9 +388,10 @@ void DoA36746(void) {
 
 void UpdateFaults(void) {
 
+  _STATUS_FLOW_OK = 1;
+
   if (ETMCanSlaveGetComFaultStatus()) {
     _FAULT_CAN_COMMUNICATION_LATCHED = 1;
-    //DPARKER global_data_A36926.fault_active = 1;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_CAN_COMMUNICATION_LATCHED = 0;
@@ -399,6 +400,7 @@ void UpdateFaults(void) {
   
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_1_magnetron)) {
     _FAULT_FLOW_SENSOR_1 = 1;
+    _STATUS_FLOW_OK = 0;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_1 = 0;
@@ -407,6 +409,7 @@ void UpdateFaults(void) {
   
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_2_linac)) {
     _FAULT_FLOW_SENSOR_2 = 1;
+    _STATUS_FLOW_OK = 0;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_2 = 0;
@@ -415,6 +418,7 @@ void UpdateFaults(void) {
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_3_hv_tank)) {
     _FAULT_FLOW_SENSOR_3 = 1;
+    _STATUS_FLOW_OK = 0;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_3 = 0;
@@ -423,6 +427,7 @@ void UpdateFaults(void) {
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_4_hvps)) {
     _FAULT_FLOW_SENSOR_4 = 1;
+    _STATUS_FLOW_OK = 0;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_4 = 0;
@@ -431,6 +436,7 @@ void UpdateFaults(void) {
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_5_circulator)) {
     _FAULT_FLOW_SENSOR_5 = 1;
+    _STATUS_FLOW_OK = 0;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_5 = 0;
@@ -439,6 +445,7 @@ void UpdateFaults(void) {
 
   if (CheckFlowMeterFault(&global_data_A36926.flow_meter_6_alternate)) {
     _FAULT_FLOW_SENSOR_6 = 1;
+    _STATUS_FLOW_OK = 0;
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
       _FAULT_FLOW_SENSOR_6 = 0;
@@ -496,7 +503,6 @@ void UpdateFaults(void) {
   // Check for under pressure on SF6
   if (ETMAnalogCheckUnderAbsolute(&global_data_A36926.analog_input_SF6_pressure)) {
     _FAULT_SF6_UNDER_PRESSURE = 1;
-    // DPARKER global_data_A36926.fault_active = 1;
   } else if (ETMCanSlaveGetSyncMsgResetEnable()) {
     _FAULT_SF6_UNDER_PRESSURE = 0;
   }
