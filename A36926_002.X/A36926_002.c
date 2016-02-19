@@ -1,6 +1,6 @@
 #include "A36926_002.h"
 
-#define __BENCH_TOP_MODE
+//#define __BENCH_TOP_MODE
 
 void InitializeFlowMeter(TYPE_FLOW_READING* flow_ptr, unsigned int min_flow, unsigned int* ptr_icxbuf, unsigned int* ptr_tmrx);
 
