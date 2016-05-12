@@ -705,6 +705,9 @@ void InitializeA36746(void) {
   IC4CON = ICXCON_VALUE;
   IC5CON = ICXCON_VALUE;
   IC6CON = ICXCON_VALUE;
+
+  //PIC_15V_SUPPLY_ENABLE = 1;
+  _TRISA6 = 1;  //  Enable the 15V supply
 }
 
 
