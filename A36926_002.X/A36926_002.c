@@ -582,6 +582,7 @@ void InitializeA36746(void) {
 
 
   // Initialize the External EEprom
+  ETMEEPromUseExternal();
   ETMEEPromConfigureExternalDevice(EEPROM_SIZE_8K_BYTES, FCY_CLK, 400000, EEPROM_I2C_ADDRESS_0, 1);
 
   // Initialize the Can module
@@ -706,8 +707,6 @@ void InitializeA36746(void) {
   IC5CON = ICXCON_VALUE;
   IC6CON = ICXCON_VALUE;
 
-  //PIC_15V_SUPPLY_ENABLE = 1;
-  _TRISA6 = 1;  //  Enable the 15V supply
 }
 
 
