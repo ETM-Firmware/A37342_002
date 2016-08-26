@@ -686,9 +686,10 @@ void InitializeA36746(void) {
   if (global_data_A36926.SF6_pulses_available > 25) {
     global_data_A36926.SF6_pulses_available = 25;
   }
-  if (global_data_A36926.SF6_bottle_pulses_remaining > 700) {
-    global_data_A36926.SF6_bottle_pulses_remaining = 700;
+  if (global_data_A36926.SF6_bottle_pulses_remaining > 30000) {
+    global_data_A36926.SF6_bottle_pulses_remaining = 0;
   }
+
 
   InitializeFlowMeter(&global_data_A36926.flow_meter_1_magnetron,  MINIMUM_FLOW_MAGNETRON,  (unsigned int*)&IC1BUF, (unsigned int*)&TMR2);
   InitializeFlowMeter(&global_data_A36926.flow_meter_2_linac,      MINIMUM_FLOW_LINAC,      (unsigned int*)&IC2BUF, (unsigned int*)&TMR2);
