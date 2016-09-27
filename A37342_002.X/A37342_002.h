@@ -1,7 +1,7 @@
-#ifndef __A36926_002_H
-#define __A36926_002_H
+#ifndef __A37342_002_H
+#define __A37342_002_H
 
-// A36926-002 This is the Can interface board configured as Cooling Interface board
+// A37342-002 This is the Can interface board configured as Cooling Interface board
 
 #include <xc.h>
 #include <adc12.h>
@@ -11,7 +11,7 @@
 #include "ETM.h"
 #include "P1395_CAN_SLAVE.h"
 #include "FIRMWARE_VERSION.h"
-#include "A36926_002_CONFIG.h"
+#include "A37342_002_CONFIG.h"
 
 
 #define FCY_CLK     10000000
@@ -37,7 +37,7 @@
 
 
 
-// ---------- BASE A36926 I/O CONFIGURATION ----------------- //
+// ---------- BASE A37342 I/O CONFIGURATION ----------------- //
  
 #define PIC_DIG_IN_1      _RD8
 #define PIC_DIG_IN_2      _RD9
@@ -97,16 +97,16 @@
   G12,G13
 */
 
-#define A36926_TRISA_VALUE 0b1111111111111111
-#define A36926_TRISB_VALUE 0b1011111111111111
-#define A36926_TRISC_VALUE 0b1111111111111111
-#define A36926_TRISD_VALUE 0b1111111111110000
-#define A36926_TRISF_VALUE 0b1111111000110011
-#define A36926_TRISG_VALUE 0b1100111111111111
+#define A37342_TRISA_VALUE 0b1111111111111111
+#define A37342_TRISB_VALUE 0b1011111111111111
+#define A37342_TRISC_VALUE 0b1111111111111111
+#define A37342_TRISD_VALUE 0b1111111111110000
+#define A37342_TRISF_VALUE 0b1111111000110011
+#define A37342_TRISG_VALUE 0b1100111111111111
 
 
 
-// ----------------------- CONFIGURE PINS FOR A36926-002 Code ----------------- //
+// ----------------------- CONFIGURE PINS FOR A37342-002 Code ----------------- //
 
 
 // -------- Digital Input Pins ----------//
