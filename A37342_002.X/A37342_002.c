@@ -53,6 +53,7 @@ void DoStateMachine(void) {
     InitializeA36746();
     _CONTROL_NOT_CONFIGURED = 0;
     _CONTROL_NOT_READY = 1;
+    PIN_RELAY_OUT_SF6_SOLENOID = !OLL_CLOSE_SOLENOID;
     global_data_A37342.startup_counter = 0;
     while (global_data_A37342.control_state == STATE_STARTUP) {
       DoA36746();
@@ -66,6 +67,7 @@ void DoStateMachine(void) {
     
   case STATE_NOT_READY:
     PIN_LED_OPERATIONAL_GREEN = OLL_LED_ON;
+    PIN_RELAY_OUT_SF6_SOLENOID = !OLL_CLOSE_SOLENOID;
     _CONTROL_NOT_READY = 1;
     while (global_data_A37342.control_state == STATE_NOT_READY) {
       DoA36746();
@@ -79,6 +81,7 @@ void DoStateMachine(void) {
   case STATE_TESTING:
     _CONTROL_NOT_READY = 1;
     global_data_A37342.test_timer = 0;
+    PIN_RELAY_OUT_SF6_SOLENOID = !OLL_CLOSE_SOLENOID;
     while (global_data_A37342.control_state == STATE_TESTING) {
       DoA36746();
       if (global_data_A37342.test_timer >= COOLING_INTERFACE_BOARD_TEST_TIME) {
@@ -95,6 +98,7 @@ void DoStateMachine(void) {
   case STATE_READY:
     _FAULT_REGISTER = 0;
     _CONTROL_NOT_READY = 0;
+    PIN_RELAY_OUT_SF6_SOLENOID = OLL_CLOSE_SOLENOID;
     while (global_data_A37342.control_state == STATE_READY) {
       DoA36746();
       if (_FAULT_REGISTER) {
@@ -812,7 +816,7 @@ void DoSF6Management(void) {
 
   case SF6_STATE_CHARGING:
     global_data_A37342.SF6_state_charging_counter++;
-    PIN_RELAY_OUT_SF6_SOLENOID = OLL_CLOSE_SOLENOID;
+    //    PIN_RELAY_OUT_SF6_SOLENOID = OLL_CLOSE_SOLENOID;
     _STATUS_SF6_SOLENOID_RELAY_CLOSED = 1;
     _STATUS_SF6_FILLING = 1;
     if (global_data_A37342.SF6_state_charging_counter >= SF6_TIME_CHARGING) {
@@ -822,7 +826,7 @@ void DoSF6Management(void) {
     break;
 
   case SF6_STATE_DELAY:
-    PIN_RELAY_OUT_SF6_SOLENOID = !OLL_CLOSE_SOLENOID;
+    //PIN_RELAY_OUT_SF6_SOLENOID = !OLL_CLOSE_SOLENOID;
     _STATUS_SF6_SOLENOID_RELAY_CLOSED = 0;
     _STATUS_SF6_FILLING = 1;
     global_data_A37342.SF6_state_delay_counter++;
