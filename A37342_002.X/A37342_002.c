@@ -470,7 +470,7 @@ void UpdateFaults(void) {
     
   if (ETMDigitalFilteredOutput(&global_data_A37342.digital_input_7_cabinet_temp_switch) == ILL_TEMP_SWITCH_OVER_TEMP) {
 #ifndef __BENCH_TOP_MODE
-    _FAULT_CABINET_TEMP_SWITCH = 1;
+    //_FAULT_CABINET_TEMP_SWITCH = 1;
 #endif
   } else {
     if (ETMCanSlaveGetSyncMsgResetEnable()) {
