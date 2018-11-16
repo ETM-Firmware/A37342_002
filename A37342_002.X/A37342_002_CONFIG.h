@@ -7,6 +7,7 @@
 
 #define LINAC_2_5
 
+#define _P1500_MAGNETX
 
 #ifdef LINAC_2_5
 // Configure the trip points for the 2.5 System
@@ -20,6 +21,15 @@
 // Temperature Switch Fault Setup
 #define TEMPERATURE_SWITCH_FILTER_TIME           200   // 2 seconds
 
+#ifdef _P1500_MAGNETX
+// Flow Meter Fault Setup
+#define MINIMUM_FLOW_MAGNETRON                   1000
+#define MINIMUM_FLOW_LINAC                       1000
+#define MINIMUM_FLOW_HV_TANK                     1000 // HVPS and HV TANK
+#define MINIMUM_FLOW_HVPS                        1000 // HEAT EXCHANGER
+#define MINIMUM_FLOW_CIRCULATOR                  1000 // CIRCULATOR
+#define MINIMUM_FLOW_SPARE                       0
+#else
 // Flow Meter Fault Setup
 #define MINIMUM_FLOW_MAGNETRON                   3800
 #define MINIMUM_FLOW_LINAC                       6500
@@ -27,6 +37,8 @@
 #define MINIMUM_FLOW_HVPS                        0
 #define MINIMUM_FLOW_CIRCULATOR                  0
 #define MINIMUM_FLOW_SPARE                       0
+#endif
+
 
 // SF6 Management Configuration
 #define MINIMUM_COOLANT_TEMP_FOR_SF6_MANAGEMENT  292   // 292 Deg K / 20 Deg C
