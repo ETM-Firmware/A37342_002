@@ -308,6 +308,15 @@ void DoA36746(void) {
     // Timer has expired so execute the scheduled code (should be once every 10ms)
     _T1IF = 0;
 
+    global_data_A37342.hour_counter++;
+    if (global_data_A37342.hour_counter > SF6_HOUR_COUNTER) {
+      // has been running for an hour (or whatver the counter is configured too)
+      global_data_A37342.hour_counter = 0;
+      if (global_data_A37342.SF6_pulses_available < SF6_PULSES_AVAILABLE_AT_POWER_UP) {
+	global_data_A37342.SF6_pulses_available++;
+      }
+    }
+    
     DoSF6Management();
 
     global_data_A37342.test_timer++;
@@ -344,7 +353,9 @@ void DoA36746(void) {
     ETMCanSlaveSetDebugRegister(0x6, global_data_A37342.flow_meter_1_magnetron.flow_reading);
     ETMCanSlaveSetDebugRegister(0x7, global_data_A37342.analog_input_SF6_pressure.filtered_adc_reading);//global_data_A37342.control_state);
 
+    ETMCanSlaveSetDebugRegister(0x8, global_data_A37342.coolant_temperature_kelvin);
 
+    
     // Update all the logging data
     slave_board_data.log_data[0] = global_data_A37342.flow_meter_1_magnetron.flow_reading;
     slave_board_data.log_data[1] = global_data_A37342.flow_meter_2_linac.flow_reading;
@@ -497,6 +508,20 @@ void UpdateFaults(void) {
     }
   }
 
+  // Check for under temperature on Thermistor 1
+  // We are using the over absolute function because as temperature goes down, resistance (and voltage) go up 
+  if (ETMAnalogCheckOverAbsolute(&global_data_A37342.analog_input_thermistor_1)) {
+#ifndef __BENCH_TOP_MODE
+    _FAULT_COOLANT_OVER_TEMP = 1;
+#endif
+  } else {
+    if (ETMCanSlaveGetSyncMsgResetEnable()) {
+      _FAULT_COOLANT_OVER_TEMP = 0;
+    }
+  }
+
+  
+
   // Check for over temperature on Thermistor 2
   if (ETMAnalogCheckUnderAbsolute(&global_data_A37342.analog_input_thermistor_2)) {
     // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
@@ -587,7 +612,7 @@ void InitializeA36746(void) {
 
   // Initialize the Can module
   ETMCanSlaveInitialize(CAN_PORT_1, FCY_CLK, ETM_CAN_ADDR_COOLING_INTERFACE_BOARD, _PIN_RG13, 4, _PIN_RA7, _PIN_RG12);
-  ETMCanSlaveLoadConfiguration(37342, 002, FIRMWARE_AGILE_REV, FIRMWARE_BRANCH, FIRMWARE_BRANCH_REV);
+  ETMCanSlaveLoadConfiguration(37342, SOFTWARE_DASH_NUMBER, FIRMWARE_AGILE_REV, FIRMWARE_BRANCH, FIRMWARE_BRANCH_REV);
 
 
   // Initialize the Analog Input & Output Scaling
@@ -597,8 +622,8 @@ void InitializeA36746(void) {
 			   MACRO_DEC_TO_SCALE_FACTOR_16(TEMPERATURE_SENSOR_FIXED_SCALE),
 			   OFFSET_ZERO,
 			   ANALOG_INPUT_NO_CALIBRATION,
-			   NO_OVER_TRIP,
-			   COOLANT_TRIP_THERMISTOR_VOLTAGE,
+			   COOLANT_TRIP_THERMISTOR_VOLTAGE_UNDER_TEMP_OVER_VOLTAGE,
+			   COOLANT_TRIP_THERMISTOR_VOLTAGE_OVER_TEMP_UNDER_VOLTAGE,
 			   NO_TRIP_SCALE,
 			   NO_FLOOR,
 			   NO_RELATIVE_COUNTER,
@@ -683,6 +708,8 @@ void InitializeA36746(void) {
   
   ETMEEPromReadPage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A37342.SF6_pulses_available);
   // This reads SF6_pulses_available and SF6_bottle_pulses_remaining from the external EEPROM with a single I2C command
+  global_data_A37342.hour_counter = 0;
+  global_data_A37342.SF6_pulses_available = SF6_PULSES_AVAILABLE_AT_POWER_UP;
   if (global_data_A37342.SF6_pulses_available > 25) {
     global_data_A37342.SF6_pulses_available = 25;
   }
@@ -766,10 +793,14 @@ void DoSF6Management(void) {
     }
     _STATUS_SF6_COOLANT_TOO_LOW = 0;
 
+
+    // REMOVE minimum pressure for sf6 management
+    /*
     if ((global_data_A37342.analog_input_SF6_pressure.reading_scaled_and_calibrated < MINIMUM_PRESSURE_FOR_SF6_MANAGEMENT) && (global_data_A37342.SF6_low_pressure_override_counter == 0)) {
       _STATUS_SF6_PRESSURE_TO_LOW_TO_MANAGE = 1;
       break;
     }
+    */
     _STATUS_SF6_PRESSURE_TO_LOW_TO_MANAGE = 0;
 
     if (global_data_A37342.analog_input_SF6_pressure.reading_scaled_and_calibrated > global_data_A37342.SF6_fill_threshold) {
@@ -919,8 +950,10 @@ void ETMCanSlaveExecuteCMDBoardSpecific(ETMCanMessage* message_ptr) {
       */
 
     case ETM_CAN_REGISTER_COOLING_CMD_SF6_PULSE_LIMIT_OVERRIDE:
-      global_data_A37342.SF6_pulses_available = 25;
-      ETMEEPromWritePage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A37342.SF6_pulses_available);
+      /*
+	global_data_A37342.SF6_pulses_available = 25;
+	ETMEEPromWritePage(ETM_EEPROM_PAGE_COOLING_INTERFACE, 2, &global_data_A37342.SF6_pulses_available);
+      */
       break;
       
     case ETM_CAN_REGISTER_COOLING_CMD_RESET_BOTTLE_COUNT:

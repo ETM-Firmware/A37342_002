@@ -297,7 +297,9 @@ typedef struct {
   // THESE TWO VARIABLES MUST BE ADJACENT TO EACH OTHER IN MEMORY BECAUSE THEY ARE ACCESSED AS A PAIR WHEN READING/WRITING THE EEPROM
   unsigned int SF6_pulses_available;           // This is how many pulses can be sent out without ECB intervention
   unsigned int SF6_bottle_pulses_remaining;    // This is how many pulses are remainging in the bottle
-  
+
+
+  unsigned long hour_counter;
 
 } TYPE_COOLING_GLOBALS;
 
