@@ -496,9 +496,15 @@ void UpdateFaults(void) {
   }
 
     
-  // Check for over temperature on Thermistor 1
-  // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
   if (ETMAnalogCheckUnderAbsolute(&global_data_A37342.analog_input_thermistor_1)) {
+    // Check for over temperature on Thermistor 1
+    // We are using the under absolute function because as temperature goes up, resistance (and voltage) go down 
+#ifndef __BENCH_TOP_MODE
+    _FAULT_COOLANT_OVER_TEMP = 1;
+#endif
+  } else if (ETMAnalogCheckOverAbsolute(&global_data_A37342.analog_input_thermistor_1)) {
+    // Check for under temperature on Thermistor 1
+    // We are using the over absolute function because as temperature goes down, resistance (and voltage) go up 
 #ifndef __BENCH_TOP_MODE
     _FAULT_COOLANT_OVER_TEMP = 1;
 #endif
@@ -507,20 +513,6 @@ void UpdateFaults(void) {
       _FAULT_COOLANT_OVER_TEMP = 0;
     }
   }
-
-  // Check for under temperature on Thermistor 1
-  // We are using the over absolute function because as temperature goes down, resistance (and voltage) go up 
-  if (ETMAnalogCheckOverAbsolute(&global_data_A37342.analog_input_thermistor_1)) {
-#ifndef __BENCH_TOP_MODE
-    _FAULT_COOLANT_OVER_TEMP = 1;
-#endif
-  } else {
-    if (ETMCanSlaveGetSyncMsgResetEnable()) {
-      _FAULT_COOLANT_OVER_TEMP = 0;
-    }
-  }
-
-  
 
   // Check for over temperature on Thermistor 2
   if (ETMAnalogCheckUnderAbsolute(&global_data_A37342.analog_input_thermistor_2)) {
