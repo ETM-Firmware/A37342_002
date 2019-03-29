@@ -702,8 +702,8 @@ void InitializeA36746(void) {
   // This reads SF6_pulses_available and SF6_bottle_pulses_remaining from the external EEPROM with a single I2C command
   global_data_A37342.hour_counter = 0;
   global_data_A37342.SF6_pulses_available = SF6_PULSES_AVAILABLE_AT_POWER_UP;
-  if (global_data_A37342.SF6_pulses_available > 25) {
-    global_data_A37342.SF6_pulses_available = 25;
+  if (global_data_A37342.SF6_pulses_available > SF6_PULSES_AVAILABLE_AT_POWER_UP) {
+    global_data_A37342.SF6_pulses_available = SF6_PULSES_AVAILABLE_AT_POWER_UP;
   }
   if (global_data_A37342.SF6_bottle_pulses_remaining > 30000) {
     global_data_A37342.SF6_bottle_pulses_remaining = 0;
