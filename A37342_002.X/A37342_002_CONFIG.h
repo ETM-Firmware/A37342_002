@@ -5,8 +5,8 @@
 
 // FAULT CONFIGURATION
 
-#define __LINAC_2_5
-//#define __LINAC_MAGNETX
+//#define __LINAC_2_5
+#define __LINAC_MAGNETX
 
 
 

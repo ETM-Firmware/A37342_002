@@ -705,7 +705,7 @@ void InitializeA36746(void) {
   if (global_data_A37342.SF6_pulses_available > SF6_PULSES_AVAILABLE_AT_POWER_UP) {
     global_data_A37342.SF6_pulses_available = SF6_PULSES_AVAILABLE_AT_POWER_UP;
   }
-  if (global_data_A37342.SF6_bottle_pulses_remaining > 30000) {
+  if (global_data_A37342.SF6_bottle_pulses_remaining > 0xFF00) {
     global_data_A37342.SF6_bottle_pulses_remaining = 0;
   }
 
